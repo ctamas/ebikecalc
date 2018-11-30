@@ -2,18 +2,54 @@
   configuration-form works!
 </p>
 <h2 class="example-h2">Slider configuration</h2>
+<div class="section-container">
+<section class="picture-section">
 
-<section class="example-section">
-  <label class="example-margin">Color:</label>
-  <mat-radio-group class="example-radio-group" [(ngModel)]="configuration.power">
-    <mat-radio-button class="example-radio-button" value="5">
-      {{configuration.power}}
+  <label class="example-margin">Motor type:</label><br>
+  <mat-radio-group class="example-radio-group" [(ngModel)]="configuration.type">
+    <mat-radio-button class="type-radio-button" value="Default">
+      None
     </mat-radio-button>
-    <mat-radio-button class="example-radio-button" value="10">
-      {{configuration.power}}
+    <mat-radio-button class="type-radio-button" value="Mid">
+      Mid drive
+    </mat-radio-button>
+    <mat-radio-button class="type-radio-button" value="Hub">
+      Hub
     </mat-radio-button>
   </mat-radio-group>
-  <div class="example-selected-value">Your favorite season is: {{configuration.power}}</div>
-  
+  <div class="bike-animation-container-blow">
+    <div class="bike-container">ads
+    <img class="bike-animation" alt="bike" src="assets\bike{{configuration.type}}.png">
+  </div>
+  </div>  
 </section>
-<mat-slider min="1" max="5" step="0.5" value="1.5"></mat-slider>
+<section class="configurator-section" *ngIf="configuration.type !== 'Default'" [@panelInOut]>
+  <label class="example-margin">Weight(kg):</label><br>
+  80<mat-slider min="80" max="150" step="1" [(ngModel)]="configuration.weight"></mat-slider>150
+  <div class="example-selected-value">Your favorite season is: {{configuration.weight}}</div>
+
+  <label class="example-margin">Incline(%):</label><br>
+  -20<mat-slider min="-20" max="20" step="1" [(ngModel)]="configuration.incline"></mat-slider>20
+  <div class="example-selected-value">Your favorite season is: {{configuration.incline}}</div>
+
+  <label class="example-margin">Wheel size(inches):</label><br>
+  5<mat-slider min="5" max="30" step="1" [(ngModel)]="configuration.wheelSize"></mat-slider>30
+  <div class="example-selected-value">Your favorite season is: {{configuration.wheelSize}}</div>
+  <mat-form-field>
+    <mat-select [(ngModel)]="configuration.wheelSize">
+      <mat-option>None</mat-option>
+      <mat-option value="24">24</mat-option>
+      <mat-option value="26">26</mat-option>
+      <mat-option value="29">29</mat-option>
+    </mat-select>
+  </mat-form-field>
+    
+    <p>You selected: {{configuration.wheelSize}}</p>
+
+  <label class="example-margin">Speed(kph):</label><br>
+  1<mat-slider min="1" max="100" step="1" [(ngModel)]="configuration.speed"></mat-slider>100
+  <div class="example-selected-value">Your favorite season is: {{configuration.speed}}</div>
+  
+  <div class="example-selected-value">Requried power: {{configuration.power}}</div>
+</section>
+</div>
