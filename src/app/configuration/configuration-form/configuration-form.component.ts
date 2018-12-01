@@ -9,10 +9,10 @@ import { trigger, transition, style, animate } from '@angular/animations';
   animations: [
     trigger('panelInOut', [
         transition(':enter', [
-          style({opacity: 0}), animate(600)
+          style({transform: 'translateY(-10%)', opacity: 0}), animate(200)
         ]),
         transition(':leave', [
-          animate(600, style({opacity: 0}))
+          animate(200, style({transform: 'translateY(-10%)', opacity: 0}))
         ])
     ])
   ]
@@ -27,14 +27,22 @@ export class ConfigurationFormComponent implements OnInit {
   }
 
   newConfiguration() {
-    this.configuration = new Configuration("config1", "Default", 100, 26, 0, 30, 500, 48, 10);
-    this.calculate();
+    this.configuration = new Configuration("config1", "Default", 100, 26, 0, 20, 20, 0, 48, 10, 0, 0, 0);
   }
 
-  calculate(){
-    console.log('calculate')
-    this.configuration
-    // P = (transmission losses) * Velocity * (0.5501 * 0.6 * Velocity * Velocity + Frg + Velocity * 0.1 * cos(B)
+  calculatePower(){
+    return this.configuration.power = Math.floor((0.028 * this.configuration.speed) *( 0.55 * 0.55 * Math.pow((this.configuration.speed + 0), 2) + getRollingResistance(this.configuration.weight, this.configuration.incline) + (this.configuration.speed * 0.1 * Math.cos(gradeToRadians(this.configuration.incline)))));
+
+    function gradeToRadians(grade) {
+      return grade * Math.PI / 200;
+    }
+    function getRollingResistance(weight, incline){
+        return (9.8 * weight * (0.005 * Math.cos(gradeToRadians(incline)) + (Math.sin(gradeToRadians(incline))))); 
+      }
+  }
+
+  calculateEnergy(){
+    return this.configuration.energy = Math.floor(this.configuration.distance/this.configuration.speed*this.configuration.power);
   }
   //  name: string,
   //  type?: string,
@@ -42,7 +50,13 @@ export class ConfigurationFormComponent implements OnInit {
   //  incline?: number,
   //  wheelSize?: number,
   //  speed?: number,
+  //  distance?: number,  
   //  power?: number,
+  //  energy?: number,
   //  volts?: number,
-  //  amperes?: number
+  //  amperes?: number,
+  //  serial?: number,
+  //  parallel?: number,
+  //  actualPower?: number,
+  //  actualEnergy?: number,
 }
