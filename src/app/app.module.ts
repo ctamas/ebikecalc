@@ -11,6 +11,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+
 import { ConfigurationFormComponent } from './configuration/configuration-form/configuration-form.component';
 import 'hammerjs';
 
@@ -28,6 +31,8 @@ import 'hammerjs';
     MatSelectModule,
     MatStepperModule,
     MatToolbarModule,
+    MatIconModule,
+    MatTableModule,
     FormsModule
   ],
   providers: [],

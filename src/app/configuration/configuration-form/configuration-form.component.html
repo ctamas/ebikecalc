@@ -1,76 +1,84 @@
 <!-- <h2 class="example-h2"> Ebike configuration</h2> -->
 <div class="section-container">
   <section class="picture-section">
-    
-    
     <div class="bike-animation-container wind-blow">
       <div class="bike-container" [ngClass]="{'bike-uphill': configuration.incline >= 10, 'bike-downhill':  configuration.incline <= -10}">
-        <img class="bike-animation" alt="bike" src="assets\bike{{configuration.type}}.png"
-        [ngClass]="{'fast-animation': configuration.speed > 40,
-        'slow-animation':  configuration.speed <= 40 && configuration.speed > 20,
+        <img class="bike-animation" alt="bike" src="assets\bike{{configuration.type}}{{batterySize()}}Bat.png"
+        [ngClass]="{'fast-animation': configuration.speed > 50,
+        'slow-animation':  configuration.speed <= 50 && configuration.speed > 30,
         'bike-uphill': configuration.incline > 10, 'bike-downhill':  configuration.incline < -10}">
         <img class="flat" alt="flat" src="assets\flat.png">
       </div>
     </div>  
     <div class="configurator-section" [@panelInOut]>
       <div class="example-selected-value">Average power: {{calculatePower()}} W</div><br>
-      <div class="example-selected-value">Requried energy: {{calculateEnergy()}} Wh</div><br>
+      <div class="example-selected-value">Requried energy: {{calculateEnergy()}} Wh</div>
       </div>
-      <div class="configurator-section" *ngIf="configuration.type !== 'Default'" [@panelInOut]>
-      <div class="example-selected-value">System power: {{this.configuration.actualPower}} W</div><br>
-      <div class="example-selected-value">Avaliable energy: {{this.configuration.actualEnergy}} Wh</div>
+      <div class="configurator-section" *ngIf="configuration.serial !== 0" [@panelInOut]>
+        <i class="material-icons md-36 configurator-icon check-icon md-36" [ngClass]="{'red-check-icon': calculatePower() > actualPower()}">done</i>
+        <div class="example-selected-value">System power: {{actualPower()}} W</div> <br>
+        <i class="material-icons md-36 configurator-icon check-icon md-36" [ngClass]="{'red-check-icon': calculateEnergy() > actualEnergy()}">done</i>
+      <div class="example-selected-value">Avaliable energy: {{actualEnergy()}} Wh</div>
     </div>
   </section>
-<mat-horizontal-stepper>
+<mat-horizontal-stepper (animationDone)="message=$event">
   <mat-step>
-    <ng-template matStepLabel>Trip and environment</ng-template>
-    <section class="configurator-section">
-  <label class="slider-label">Weight(kg): </label><i class="material-icons configurator-icon">landscape</i><br>
-  <mat-slider class="slider" thumbLabel min="80" max="140" step="20" [(ngModel)]="configuration.weight"></mat-slider> {{configuration.weight}}<br>
-  <label class="slider-label">Incline(%): </label><br>
-  <mat-slider class="slider" min="-55" max="55" step="5" [(ngModel)]="configuration.incline"></mat-slider> {{configuration.incline}}<br>
-
-<!--   <label class="slider-label">Wheel size(inches): </label> {{configuration.wheelSize}}<br>
-  20 <mat-slider class="slider" min="20" max="30" step="1" [(ngModel)]="configuration.wheelSize"></mat-slider> 30<br> -->
-  <!-- <mat-form-field>
-    <mat-select [(ngModel)]="configuration.wheelSize">
-      <mat-option>None</mat-option>
+    <ng-template matStepLabel>Trip</ng-template>
+    <section class="configurator-section">      
+      <!-- <mat-form-field>
+        <mat-select [(ngModel)]="configuration.wheelSize">
+          <mat-option>None</mat-option>
       <mat-option value="24">24</mat-option>
       <mat-option value="26">26</mat-option>
       <mat-option value="29">29</mat-option>
     </mat-select>
   </mat-form-field>
-     -->
-  <label class="slider-label">Speed(kph): </label><br>
-  <mat-slider class="slider" min="10" max="80" step="10" [(ngModel)]="configuration.speed"></mat-slider> {{configuration.speed}}<br>
-  <label class="slider-label">Distance(km): </label> <br>
-  <mat-slider class="slider" thumbLabel min="10" max="100" step="5" [(ngModel)]="configuration.distance"></mat-slider> {{configuration.distance}}<br>
+-->
+<label class="slider-label">Speed(kph): </label><i class="material-icons md-36 configurator-icon">landscape</i><br>
+<mat-slider class="slider" min="10" max="80" step="10" [(ngModel)]="configuration.speed"></mat-slider> {{configuration.speed}}<br><br>
+<label class="slider-label">Distance(km): </label><br>
+<mat-slider class="slider" min="10" max="120" step="10" [(ngModel)]="configuration.distance"></mat-slider> {{configuration.distance}}<br><br>
+<label class="slider-label">Incline(%): </label><br>
+<mat-slider class="slider" min="-20" max="20" step="5" [(ngModel)]="configuration.incline"></mat-slider> {{configuration.incline}}<br><br>
+<label class="slider-label">Weight(kg): </label><br>
+<mat-slider class="slider" min="80" max="140" step="20" [(ngModel)]="configuration.weight"></mat-slider> {{configuration.weight}}<br><br>
 </section>
 </mat-step>
 <mat-step>
-    <ng-template matStepLabel>Battery</ng-template>
-    <section class="configurator-section">
-        <label class="example-margin">Motor type:</label><i class="material-icons configurator-icon">flash_on</i><br><br>
-        <mat-radio-group class="example-radio-group" [(ngModel)]="configuration.type">
-          <mat-radio-button class="type-radio-button" value="Default">
-            None
-          </mat-radio-button>
-          <mat-radio-button class="type-radio-button" value="Mid">
-            Mid drive
-          </mat-radio-button>
-          <mat-radio-button class="type-radio-button" value="Hub">
-            Hub
-          </mat-radio-button>
-        </mat-radio-group>
-               <label class="slider-label">Parralel cells:: </label><br>
-  <mat-slider class="slider" thumbLabel min="80" max="140" step="20" [(ngModel)]="configuration.weight"></mat-slider> {{configuration.weight}}<br>
-  <label class="slider-label">Serial cells: </label><br>
-  <mat-slider class="slider" min="-55" max="55" step="5" [(ngModel)]="configuration.incline"></mat-slider> {{configuration.incline}}<br>
-
-    </section>
-  </mat-step>
-  <mat-step>
-    <ng-template matStepLabel>Drivetrain</ng-template>
+  <ng-template matStepLabel>Battery</ng-template>
+  <section class="configurator-section">
+    <i class="material-icons md-36 configurator-icon">battery_charging_full</i>
+    <label class="slider-label">Serial cells: </label><br>
+    <mat-slider class="slider" min="0" max="20" step="2" [(ngModel)]="configuration.serial"></mat-slider> {{configuration.serial}}<br><br>
+    <label class="slider-label">Parralel cells: </label><br>
+    <mat-slider class="slider" min="0" max="12" step="1" [(ngModel)]="configuration.parallel"></mat-slider> {{configuration.parallel}}<br><br>
+    <label class="slider-label">Battery weight: </label><br><br> {{batteryWeight()}} Kg<br><br>
+    <label class="slider-label">Volts: </label><br><br> {{configuration.serial*3.6}} V<br><br>
+    <label class="slider-label">Amps: </label><br><br> {{configuration.parallel*10}} A<br>
+    
+  </section>
+</mat-step>
+<mat-step>  
+  <ng-template matStepLabel>Drivetrain</ng-template>
+  <section class="configurator-section">
+    <i class="material-icons md-36 configurator-icon">flash_on</i>
+      <label class="example-margin">Motor type:</label><br><br>
+      <mat-radio-group class="example-radio-group" [(ngModel)]="configuration.type">
+        <mat-radio-button class="type-radio-button" value="Default">
+          None
+        </mat-radio-button>
+        <mat-radio-button class="type-radio-button" value="Mid">
+          Mid drive
+        </mat-radio-button>
+        <mat-radio-button class="type-radio-button" value="Hub">
+          Hub
+        </mat-radio-button>
+      </mat-radio-group><br><br><br>
+      <label class="slider-label">Wheel size(inches): </label> <br>
+       <mat-slider class="slider" min="20" max="30" step="1" [(ngModel)]="configuration.wheelSize"></mat-slider> {{configuration.wheelSize}}<br><br>
+       <label class="slider-label">Volts: </label><br><br> {{configuration.serial*3.6}} V<br><br>
+       <label class="slider-label">Amps: </label><br><br> {{configuration.parallel*10}} A<br>
+      </section>
   </mat-step>
 </mat-horizontal-stepper>
 

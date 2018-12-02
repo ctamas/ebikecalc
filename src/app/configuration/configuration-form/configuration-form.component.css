@@ -69,26 +69,37 @@ mat-slider {
     padding: 1.5rem;
 }
 
+mat-horizontal-stepper {
+    min-width: 8rem;
+}
+
 .type-radio-button {
     margin-right:10px;
 }
 
 .configurator-section {
-    min-width: 6rem;
-    min-height: 5rem;
-    padding: 2rem;
+    padding: 2rem 3rem 1.5rem;
     margin: 1rem; 
     border-radius: 1.75rem;
     box-shadow: 0 0 2rem rgba(0, 0, 255, 0.1);
 }
 
 .configurator-icon {
-    text-align: right;
+    float: right;
 }
 
 .environment-configurator-section {
 }
 
+.check-icon {
+    color: rgb(0, 219, 0);
+    font-size: 36px;
+}
+
+.red-check-icon {
+    color: rgb(255, 0, 0);
+    font-size: 36px;
+}
 .picture-section {
     /* border-radius: 1.75rem;
     box-shadow: 0 0 2rem rgba(0, 0, 255, 0.1); */
