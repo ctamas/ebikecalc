@@ -2,3 +2,6 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 0px;
 }
+div.mat-tooltip {
+    font-size: 13px;
+}

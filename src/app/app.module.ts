@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
@@ -13,6 +13,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { ConfigurationFormComponent } from './configuration/configuration-form/configuration-form.component';
 import 'hammerjs';
@@ -33,6 +34,7 @@ import 'hammerjs';
     MatToolbarModule,
     MatIconModule,
     MatTableModule,
+    MatTooltipModule,
     FormsModule
   ],
   providers: [],

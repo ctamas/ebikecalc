@@ -8,6 +8,7 @@ export class Configuration {
     public incline?: number,
     public speed?: number,
     public distance?: number,
+    public gearRatio?: number,
     public power?: number,
     public energy?: number,
     public volts?: number,
