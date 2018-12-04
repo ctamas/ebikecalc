@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Configuration } from "../configuration.model";
-import { trigger, state, transition, style, animate } from '@angular/animations';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-configuration-form',
@@ -9,31 +9,25 @@ import { trigger, state, transition, style, animate } from '@angular/animations'
   animations: [
     trigger('panelInOut', [
         transition(':enter', [
-          style({transform: 'translateY(-10%)', opacity: 0}), animate(300)
+          style({transform: 'translateX(30%)', opacity: 0}), animate(300)
         ]),
         transition(':leave', [
-          animate(300, style({transform: 'translateY(-10%)', opacity: 0}))
+          animate(300, style({transform: 'translateX(30%)', opacity: 0}))
         ])
-    ]),
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]), 
+    ])
   ]
 })
 
 export class ConfigurationFormComponent implements OnInit {
   configuration: Configuration;
   columnsToDisplay = ['RPM', 'Speed', 'Torque', 'Wattage'];
-  @Input('label') public label = 'label';
 
   ngOnInit() {
     this.newConfiguration();
   }
 
   newConfiguration() {
-    this.configuration = new Configuration("config1", "Default", 100, 26, 0, 30, 50, 3, 0, 0, 0, 0, 0, 0, 0);
+    this.configuration = new Configuration("Default", 100, 26, 0, 30, 50, 3, 0, 0, 0, 0, 0, 0, 0);
   }
 
   calculateConfigPower() {
@@ -41,15 +35,16 @@ export class ConfigurationFormComponent implements OnInit {
   }
 
   calculatePower(speed, incline, weight){
-    return Math.floor((0.028 * speed) *( 0.55 * 0.55 * Math.pow((speed + 0), 2) +
+    return Math.ceil((0.028 * speed) *( 0.55 * 0.55 * Math.pow((speed + 0), 2) +
            getRollingResistance(weight, incline) + (speed * 0.1 * Math.cos(gradeToRadians(incline)))));
 
     function gradeToRadians(grade) {
       return grade * Math.PI / 200;
     }
+
     function getRollingResistance(weight, incline){
-        return (9.8 * weight * (0.0051 * Math.cos(gradeToRadians(incline)) + (Math.sin(gradeToRadians(incline))))); 
-      }
+      return (9.8 * weight * (0.0051 * Math.cos(gradeToRadians(incline)) + (Math.sin(gradeToRadians(incline))))); 
+    }
   }
 
   calculateEnergy(){
@@ -102,10 +97,11 @@ export class ConfigurationFormComponent implements OnInit {
 
   getMotorKv() {
     if(this.configuration.type !=='Default') {
-        return this.configuration.type === 'Hub' ? hubMotorKv : midMotorKv;
-      } else 
-      return 0;
-    }
+      return this.configuration.type === 'Hub' ? hubMotorKv : midMotorKv;
+    } else 
+    return 0;
+  }
+
   getMotorKt() {
     if(this.configuration.type !=='Default') {
       return this.configuration.type === 'Hub' ? hubMotorKt : midMotorKt;
@@ -116,11 +112,13 @@ export class ConfigurationFormComponent implements OnInit {
   getPowerCheckString() {
     return this.configuration.power<this.configuration.actualPower ? 'Desired power is reached.' : 'Desired power is not reached. Try a larger battery or lower your speed.';
   }
+
   getEnergyCheckString() {
     return this.configuration.energy<this.configuration.actualEnergy ? 'Desired energy is reached.' : 'Desired energy is not reached. Try a larger battery or lower your range.';
   }
+
   getTopSpeedCheckString() {
-    return this.configuration.speed<this.getTopSpeed() ? 'Desired speed is reached.' : 'Desired speed is not reached. Try a different gearing or increase battery voltage.';
+    return this.configuration.speed<this.getTopSpeed() ? 'Desired trip speed is reached.' : 'Desired speed is not reached. Try a different gearing or increase battery voltage.';
   }
 
   calculateHubGearingTable() {  
@@ -129,16 +127,17 @@ export class ConfigurationFormComponent implements OnInit {
       for (var i = 0; i < 10; i++) {
         result[i]={
           RPM: (i+1)*10 + '%',
-          Speed: Math.floor((this.getTopSpeed()) * ((i+1)/10)),
-          Torque: Math.floor((this.getTorque()) * ((10 - (i+1))/10)),
-          Wattage: this.checkWattage(this.calculatePower(Math.floor((this.getTopSpeed()) * ((i+1)/10)), 0, this.configuration.weight))
+          Speed: Math.floor(this.getTopSpeed() * (i+1)/10) + ' Kph',
+          Torque: Math.floor(this.getTorque() * (10 - (i+1))/10) + ' Nm',
+          Wattage: this.checkWattage(this.calculatePower(Math.floor(this.getTopSpeed() * (i+1)/10), 0, this.configuration.weight))
         }
       }
     }
     return result;
   }
+
   checkWattage(wattage) {
-    return (wattage < this.actualPower() ? wattage : "Unattainable!");
+    return (wattage < this.actualPower() ? wattage + ' W' : "Unattainable!");
   }
 }
 

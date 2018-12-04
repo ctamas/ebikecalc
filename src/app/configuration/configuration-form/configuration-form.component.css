@@ -1,4 +1,4 @@
-@keyframes infinite-spinning {
+@keyframes bike-animation {
     0%   {transform: rotate(0deg);}
     20%  {transform: rotate(1deg);}
     40%  {transform: rotate(-1deg);}
@@ -6,6 +6,11 @@
     80%  {transform: rotate(-1deg);}
     100% {transform: rotate(0deg);}
   }
+
+.section-container {
+    display: table;
+    margin: 0 auto;
+}
 
 .bike-animation-container.wind-blow {
     background:url('/assets/windBlow.gif');
@@ -36,7 +41,7 @@
     height:70%;
     width:70%;
     vertical-align: bottom;
-    animation-name: infinite-spinning;
+    animation-name: bike-animation;
     animation-duration: 4s;
     animation-iteration-count: infinite;
 }
@@ -69,10 +74,7 @@
 
 mat-slider {
     padding: 1.5rem;
-}
-
-mat-horizontal-stepper {
-    min-width: 8rem;
+    width: 11rem;
 }
 
 .type-radio-button {
@@ -106,8 +108,8 @@ mat-horizontal-stepper {
 }
 
 .configurator-form {
-    padding: 10px;
-    margin: 15px; 
+    padding: 0.8rem;
+    margin: 1.2rem; 
 }
 
 .disabled-config-field-background {
@@ -115,26 +117,10 @@ mat-horizontal-stepper {
     box-shadow: 0 0 2rem rgba(98, 98, 138, 0.315);
 }
 
-div.mat-tooltip.ng-trigger {
-    font-size: 18px;
-}
-
-.table-container {
-    max-width: 100%;
-}
-
-.table-label {
-    float: center;
-}
-
 table {
-    padding: 0px 15px 0px;
-    margin: 15px 5px 15px 15px; 
+    padding: 0 1.2rem 0;
+    margin: 1.2rem 0.4rem 1.2rem 1.2rem; 
     box-shadow: 0 0 2rem rgba(0, 0, 255, 0.1);
-}
-
-.table-body {
-    width: 100%;
 }
 
 .mat-table {
@@ -143,58 +129,18 @@ table {
     box-shadow: 0 0 2rem rgba(0, 0, 255, 0.1);
 }
 
-tr {
-    font-size: 16px;
+.mat-cell, .mat-header-cell {
+    font-size: 1rem;
 }
 
-tr.example-detail-row {
-  height: 0;
-}
-
-.mat-cell {
-    font-size: 16px;
-}
-
-.mat-header-cell {
-    font-size: 16px;
-}
-
-tr.example-element-row:not(.example-expanded-row):hover {
+tr.table-element-row:hover {
   background: #f5f5f5;
 }
 
-tr.example-element-row:not(.example-expanded-row):active {
+tr.table-element-row:active {
   background: #efefef;
 }
 
-.example-element-row td {
-  border-bottom-width: 0;
-}
-
-.example-element-detail {
-  overflow: hidden;
-  display: flex;
-}
-
-.example-element-diagram {
-  min-width: 80px;
-  border: 2px solid black;
-  padding: 8px;
-  font-weight: lighter;
-  margin: 8px 0;
-  height: 104px;
-}
-
-.example-element-symbol {
-  font-weight: bold;
-  font-size: 40px;
-  line-height: normal;
-}
-
-.example-element-description {
-  padding: 16px;
-}
-
-.example-element-description-attribution {
-  opacity: 0.5;
+td.mat-cell {
+    min-width: 5.8rem;
 }

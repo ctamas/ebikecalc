@@ -1,7 +1,11 @@
 body {
     font-family: 'Roboto', sans-serif;
-    margin: 0px;
+    margin: 0;
 }
 div.mat-tooltip {
-    font-size: 13px;
+    font-size: 0.8rem;
+}
+app-configuration-form {
+    display: table;
+    margin: 0 auto;
 }

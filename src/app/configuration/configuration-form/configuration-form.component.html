@@ -1,4 +1,4 @@
-<div class="section-container">
+<div class="section-container" [@panelInOut]>
   <section class="picture-section">
     <div class="bike-animation-container wind-blow">
       <div class="bike-container" [ngClass]="{'bike-uphill': configuration.incline >= 10, 'bike-downhill':  configuration.incline <= -10}">
@@ -9,7 +9,7 @@
         <img class="flat" alt="flat" src="assets\flat.png">
       </div>
     </div>  
-    <div class="configurator-section" [@panelInOut]>
+    <div class="configurator-section">
       <div>Average power: {{calculateConfigPower()}} W</div><br>
       <div>Requried energy: {{calculateEnergy()}} Wh</div>
       </div>
@@ -21,22 +21,24 @@
     </div>
   </section>
   <mat-horizontal-stepper linear>
-    <mat-step label="label">
+    <mat-step>
+      <ng-template matStepLabel>Trip</ng-template>
       <section class="configurator-section">
-  <label class="slider-label">Speed(kph): </label><i class="material-icons md-36 configurator-icon">landscape</i><br>
-  <mat-slider class="slider" min="10" max="80" step="10" [(ngModel)]="configuration.speed"></mat-slider> {{configuration.speed}}<br><br>
-  <label class="slider-label">Distance(km): </label><br>
-  <mat-slider class="slider" min="10" max="120" step="10" [(ngModel)]="configuration.distance"></mat-slider> {{configuration.distance}}<br><br>
-  <label class="slider-label">Incline(%): </label><br>
-  <mat-slider class="slider" min="-20" max="20" step="5" [(ngModel)]="configuration.incline"></mat-slider> {{configuration.incline}}<br><br>
-  <label class="slider-label">Weight(kg): </label><br>
-  <mat-slider class="slider" min="80" max="140" step="20" [(ngModel)]="configuration.weight"></mat-slider> {{configuration.weight}}<br><br>
-  </section>
-  </mat-step>
-  <mat-step [completed]="checkBatteryParameters()">
+        <label class="slider-label">Speed(kph): </label>
+        <i class="material-icons md-36 configurator-icon" matTooltip="Set up your trip preferences. Be aware a combination of high speed and long distance will require prohibitive battery capacities.">landscape</i><br>
+        <mat-slider class="slider" min="10" max="80" step="10" [(ngModel)]="configuration.speed"></mat-slider> {{configuration.speed}}<br><br>
+        <label class="slider-label">Distance(km): </label><br>
+        <mat-slider class="slider" min="10" max="120" step="10" [(ngModel)]="configuration.distance"></mat-slider> {{configuration.distance}}<br><br>
+        <label class="slider-label">Incline(%): </label><br>
+        <mat-slider class="slider" min="-20" max="20" step="5" [(ngModel)]="configuration.incline"></mat-slider> {{configuration.incline}}<br><br>
+        <label class="slider-label">Weight(kg): </label><br>
+        <mat-slider class="slider" min="80" max="140" step="20" [(ngModel)]="configuration.weight"></mat-slider> {{configuration.weight}}<br><br>
+      </section>
+    </mat-step>
+    <mat-step [completed]="checkBatteryParameters()">
     <ng-template matStepLabel>Battery</ng-template>
     <section class="configurator-section">
-      <i class="material-icons md-36 configurator-icon">battery_charging_full</i>
+      <i class="material-icons md-36 configurator-icon" matTooltip="Assumes 3000mAh capacity, 10A continous draw and 60g per cell factoring in the battery pack assembly. These are practival 18650 type cell values.">battery_charging_full</i>
       <label class="slider-label">Serial cells: </label><br>
       <mat-slider class="slider" min="0" max="20" step="2" [(ngModel)]="configuration.serial"></mat-slider> {{configuration.serial}}<br><br>
       <label class="slider-label">Parralel cells: </label><br>
@@ -49,7 +51,7 @@
   <mat-step>  
     <ng-template matStepLabel>Drivetrain</ng-template>
     <section class="configurator-section">
-      <i class="material-icons md-36 configurator-icon">flash_on</i>
+      <i class="material-icons md-36 configurator-icon" matTooltip="Assumes a 35.5kV, 0.27kt hub motor, or a 26kV, 0.364kt mid drive. These are practical values for 3000w nominal motors of both type.">flash_on</i>
         <label>Motor type:</label><br><br>
         <mat-radio-group [(ngModel)]="configuration.type">
           <mat-radio-button class="type-radio-button" value="Mid">
@@ -67,7 +69,7 @@
             <label class="slider-label">Top speed(unloaded): </label><br><br> {{getTopSpeed()}} Kph
             <i class="material-icons md-36 configurator-icon check-icon md-36" [ngClass]="{'red-check-icon': configuration.speed > getTopSpeed() || configuration.type ==='Default'}" [matTooltip]="getTopSpeedCheckString()">done</i><br><br>
             <label class="slider-label">Max wheel torque: </label><br><br> {{getTorque()}} Nm<br><br>
-            <label class="slider-label">RPM: </label><br><br> {{getRPMfromKv()}} <br>
+            <label class="slider-label">Wheel RPM: </label><br><br> {{getRPMfromKv()}} <br>
           </form>
       </section>
     </mat-step>
@@ -77,19 +79,14 @@
           [dataSource]="this.calculateHubGearingTable()" multiTemplateDataRows
           class="table-body mat-elevation-z8">
       <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
-        <th mat-header-cell *matHeaderCellDef
-        matTooltip="Shows power required throughout the RPM range, and if the speeds are unattainable with the current system power despite the gearing."> {{column}} </th>
+        <th matTooltip="Shows power required on flat land throughout the RPM range, and if the speeds are unattainable with the current system power despite the gearing."
+            mat-header-cell *matHeaderCellDef> {{column}} </th>
         <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
-      </ng-container>
-      <ng-container matColumnDef="expandedDetail">
-        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
-        </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
       <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
-          class="example-element-row">
+          class="table-element-row">
       </tr>
-    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
     </table>
   </div>
 </div>
