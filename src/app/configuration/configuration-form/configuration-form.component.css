@@ -13,7 +13,7 @@
 }
 
 .bike-animation-container.wind-blow {
-    background:url('/assets/windBlow.gif');
+    background:url('/assets/windStopped.png');
     height:340px;
     width:506px;
     vertical-align: bottom;
