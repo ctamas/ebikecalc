@@ -22,28 +22,27 @@ import { trigger, state, transition, style, animate } from '@angular/animations'
     ]), 
   ]
 })
+
 export class ConfigurationFormComponent implements OnInit {
   configuration: Configuration;
-  dataSource = this.calculateHubGearingTable();
-  columnsToDisplay = ['Gearing', 'Speed', 'Torque'];
-  @Input('batteryComplete') public batteryComplete;
-  @Input('CdkStep') public currentStep;
+  columnsToDisplay = ['RPM', 'Speed', 'Torque', 'Wattage'];
+  @Input('label') public label = 'label';
 
-  @Output() public animationDone = new EventEmitter();
   ngOnInit() {
     this.newConfiguration();
-    console.log("ConfigFormComponent init");
-    console.log("Configurations ", this);
-
   }
 
   newConfiguration() {
     this.configuration = new Configuration("config1", "Default", 100, 26, 0, 30, 50, 3, 0, 0, 0, 0, 0, 0, 0);
   }
 
-  calculatePower(){
-    return this.configuration.power = Math.floor((0.028 * this.configuration.speed) *( 0.55 * 0.55 * Math.pow((this.configuration.speed + 0), 2) +
-           getRollingResistance(this.configuration.weight, this.configuration.incline) + (this.configuration.speed * 0.1 * Math.cos(gradeToRadians(this.configuration.incline)))));
+  calculateConfigPower() {
+    return this.configuration.power = this.calculatePower(this.configuration.speed, this.configuration.incline,this.configuration.weight);
+  }
+
+  calculatePower(speed, incline, weight){
+    return Math.floor((0.028 * speed) *( 0.55 * 0.55 * Math.pow((speed + 0), 2) +
+           getRollingResistance(weight, incline) + (speed * 0.1 * Math.cos(gradeToRadians(incline)))));
 
     function gradeToRadians(grade) {
       return grade * Math.PI / 200;
@@ -70,7 +69,15 @@ export class ConfigurationFormComponent implements OnInit {
   }
 
   checkBatteryParameters() {
-    return this.calculatePower() < this.actualPower() && this.calculateEnergy() < this.actualEnergy()
+    return this.calculateConfigPower() < this.actualPower() && this.calculateEnergy() < this.actualEnergy()
+  }
+
+  gearingMethod() {
+    if(this.configuration.type === 'Hub') {
+      return '(coil turns)'
+    } else if (this.configuration.type === 'Mid') {
+      return '(reduction ratio)'
+    }
   }
 
   batterySize() {
@@ -98,59 +105,66 @@ export class ConfigurationFormComponent implements OnInit {
   //  actualPower?: number,
   //  actualEnergy?: number,
 
-getRPMfromKv() {
-  return Math.floor(this.configuration.serial*3.6*(this.getMotorKv()/this.configuration.gearRatio));
-}
+  getRPMfromKv() {
+    return Math.floor(this.configuration.serial*3.6*(this.getMotorKv()/this.configuration.gearRatio));
+  }
 
-getTopSpeed() {
-  return Math.floor(Math.PI*this.getRPMfromKv()*this.configuration.wheelSize*0.0015814)
-}
-getTorque() {
-  return Math.floor(this.configuration.parallel*10*this.getMotorKt()*this.configuration.gearRatio);
-}
+  getTopSpeed() {
+    return Math.floor(Math.PI*this.getRPMfromKv()*this.configuration.wheelSize*0.0015814)
+  }
+  getTorque() {
+    return Math.floor(this.configuration.parallel*10*this.getMotorKt()*this.configuration.gearRatio);
+  }
 
-getMotorKv() {
-  if(this.configuration.type !=='Default') {
-      return this.configuration.type === 'Hub' ? hubMotorKv : midMotorKv;
+  getMotorKv() {
+    if(this.configuration.type !=='Default') {
+        return this.configuration.type === 'Hub' ? hubMotorKv : midMotorKv;
+      } else 
+      return 0;
+    }
+  getMotorKt() {
+    if(this.configuration.type !=='Default') {
+      return this.configuration.type === 'Hub' ? hubMotorKt : midMotorKt;
     } else 
     return 0;
   }
-getMotorKt() {
-  if(this.configuration.type !=='Default') {
-    return this.configuration.type === 'Hub' ? hubMotorKt : midMotorKt;
-  } else 
-  return 0;
-}
 
-getPowerCheckString() {
-  return this.configuration.power<this.configuration.actualPower ? 'Desired power is reached.' : 'Desired power is not reached. Try a larger battery or lower your speed.';
-}
-getEnergyCheckString() {
-  return this.configuration.energy<this.configuration.actualEnergy ? 'Desired energy is reached.' : 'Desired energy is not reached. Try a larger battery or lower your range.';
-}
-getTopSpeedCheckString() {
-  return this.configuration.speed<this.getTopSpeed() ? 'Desired speed is reached.' : 'Desired speed is not reached. Try a different gearing or increase battery voltage.';
-}
-
-
-calculateHubGearingTable() {
-  let result = [];
-  for (var i = 0; i < 8; i++) {
-    result[i]={
-      Gearing: 1,
-      Speed: 222,
-      Torque: 1.0079,
-      description: 'gg'
-      
-    }
+  getPowerCheckString() {
+    return this.configuration.power<this.configuration.actualPower ? 'Desired power is reached.' : 'Desired power is not reached. Try a larger battery or lower your speed.';
   }
-  return result;
+  getEnergyCheckString() {
+    return this.configuration.energy<this.configuration.actualEnergy ? 'Desired energy is reached.' : 'Desired energy is not reached. Try a larger battery or lower your range.';
+  }
+  getTopSpeedCheckString() {
+    return this.configuration.speed<this.getTopSpeed() ? 'Desired speed is reached.' : 'Desired speed is not reached. Try a different gearing or increase battery voltage.';
+  }
+
+  calculateHubGearingTable() {  
+    let result = [];
+    console.log('calculating table');
+    if (this.configuration && this.configuration.type !== 'Default') {
+      console.log('table check positive');
+
+      for (var i = 0; i < 10; i++) {
+        result[i]={
+          RPM: (i+1)*10 + '%',
+          Speed: Math.floor((this.getTopSpeed()) * ((i+1)/10)),
+          Torque: Math.floor((this.getTorque()) * ((10 - (i+1))/10)),
+          Wattage: this.checkWattage(this.calculatePower(Math.floor((this.getTopSpeed()) * ((i+1)/10)), 0, this.configuration.weight))
+          
+        }
+      }
+    }
+    return result;
+  }
+  checkWattage(wattage) {
+    return (wattage < this.actualPower() ? wattage : "Unattainable!");
+  }
 }
-}
+
 // Store Kv and Kt
 const hubMotorKv = 35.52;
 const hubMotorKt = 0.268;
 const midMotorKv = 26;
 const midMotorKt = 0.364;
-
 

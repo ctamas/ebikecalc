@@ -1,4 +1,3 @@
-<!-- <h2 class="example-h2"> Ebike configuration</h2> -->
 <div class="section-container">
   <section class="picture-section">
     <div class="bike-animation-container wind-blow">
@@ -11,103 +10,86 @@
       </div>
     </div>  
     <div class="configurator-section" [@panelInOut]>
-      <div class="example-selected-value">Average power: {{calculatePower()}} W</div><br>
-      <div class="example-selected-value">Requried energy: {{calculateEnergy()}} Wh</div>
+      <div>Average power: {{calculateConfigPower()}} W</div><br>
+      <div>Requried energy: {{calculateEnergy()}} Wh</div>
       </div>
       <div class="configurator-section" *ngIf="batteryWeight() > 0" [@panelInOut]>
-        <i class="material-icons md-36 configurator-icon check-icon md-36" [matTooltip]="getPowerCheckString()" [ngClass]="{'red-check-icon': calculatePower() > actualPower()}">done</i>
-        <div class="example-selected-value">System power: {{actualPower()}} W</div> <br>
+        <i class="material-icons md-36 configurator-icon check-icon md-36" [matTooltip]="getPowerCheckString()" [ngClass]="{'red-check-icon': calculateConfigPower() > actualPower()}">done</i>
+        <div>System power: {{actualPower()}} W</div> <br>
         <i class="material-icons md-36 configurator-icon check-icon md-36" [matTooltip]="getEnergyCheckString()" [ngClass]="{'red-check-icon': calculateEnergy() > actualEnergy()}">done</i>
-      <div class="example-selected-value">Avaliable energy: {{actualEnergy()}} Wh</div>
+      <div>Avaliable energy: {{actualEnergy()}} Wh</div>
     </div>
   </section>
-<mat-horizontal-stepper linear (animationDone)="message=$event">
-  <mat-step>
-    <section class="configurator-section">
-<label class="slider-label">Speed(kph): </label><i class="material-icons md-36 configurator-icon">landscape</i><br>
-<mat-slider class="slider" min="10" max="80" step="10" [(ngModel)]="configuration.speed"></mat-slider> {{configuration.speed}}<br><br>
-<label class="slider-label">Distance(km): </label><br>
-<mat-slider class="slider" min="10" max="120" step="10" [(ngModel)]="configuration.distance"></mat-slider> {{configuration.distance}}<br><br>
-<label class="slider-label">Incline(%): </label><br>
-<mat-slider class="slider" min="-20" max="20" step="5" [(ngModel)]="configuration.incline"></mat-slider> {{configuration.incline}}<br><br>
-<label class="slider-label">Weight(kg): </label><br>
-<mat-slider class="slider" min="80" max="140" step="20" [(ngModel)]="configuration.weight"></mat-slider> {{configuration.weight}}<br><br>
-</section>
-</mat-step>
-<mat-step [completed]="checkBatteryParameters()">
-  <ng-template matStepLabel>Battery</ng-template>
-  <section class="configurator-section">
-    <i class="material-icons md-36 configurator-icon">battery_charging_full</i>
-    <label class="slider-label">Serial cells: </label><br>
-    <mat-slider class="slider" min="0" max="20" step="2" [(ngModel)]="configuration.serial"></mat-slider> {{configuration.serial}}<br><br>
-    <label class="slider-label">Parralel cells: </label><br>
-    <mat-slider class="slider" min="0" max="12" step="1" [(ngModel)]="configuration.parallel"></mat-slider> {{configuration.parallel}}<br><br>
-    <label class="slider-label">Battery weight: </label><br><br> {{batteryWeight()}} Kg<br><br>
-    <label class="slider-label">Volts: </label><br><br> {{configuration.serial*3.6}} V<br><br>
-    <label class="slider-label">Amps: </label><br><br> {{configuration.parallel*10}} A<br>
+  <mat-horizontal-stepper linear (animationDone)="message=$event">
+    <mat-step label="label">
+      <section class="configurator-section">
+  <label class="slider-label">Speed(kph): </label><i class="material-icons md-36 configurator-icon">landscape</i><br>
+  <mat-slider class="slider" min="10" max="80" step="10" [(ngModel)]="configuration.speed"></mat-slider> {{configuration.speed}}<br><br>
+  <label class="slider-label">Distance(km): </label><br>
+  <mat-slider class="slider" min="10" max="120" step="10" [(ngModel)]="configuration.distance"></mat-slider> {{configuration.distance}}<br><br>
+  <label class="slider-label">Incline(%): </label><br>
+  <mat-slider class="slider" min="-20" max="20" step="5" [(ngModel)]="configuration.incline"></mat-slider> {{configuration.incline}}<br><br>
+  <label class="slider-label">Weight(kg): </label><br>
+  <mat-slider class="slider" min="80" max="140" step="20" [(ngModel)]="configuration.weight"></mat-slider> {{configuration.weight}}<br><br>
   </section>
-</mat-step>
-<mat-step>  
-  <ng-template matStepLabel>Drivetrain</ng-template>
-  <section class="configurator-section">
-    <i class="material-icons md-36 configurator-icon">flash_on</i>
-      <label class="example-margin">Motor type:</label><br><br>
-      <mat-radio-group class="example-radio-group" [(ngModel)]="configuration.type">
-        <mat-radio-button class="type-radio-button" value="Mid">
-          Mid drive
-        </mat-radio-button>
-        <mat-radio-button class="type-radio-button" value="Hub">
-          Hub
-        </mat-radio-button>
-      </mat-radio-group><br><br><br>
-        <form [ngClass]="{'disabled-config-field-background': configuration.type === 'Default'}">
-          <label class="slider-label">Wheel size(inches): </label> <br>
-          <mat-slider [disabled]="configuration.type === 'Default'" name="wheelSizeSlider" class="slider" min="20" max="30" step="1" [(ngModel)]="configuration.wheelSize"></mat-slider> {{configuration.wheelSize}}<br><br>
-          <label class="slider-label">Gearing: </label> <br>
-          <mat-slider [disabled]="configuration.type === 'Default'" name="gearingSlider" class="slider" min="3" max="8" step="1" [(ngModel)]="configuration.gearRatio"></mat-slider> {{configuration.gearRatio}}<br><br>
-          <label class="slider-label">Top speed(unloaded): </label><br><br> {{getTopSpeed()}} Kph
-          <i class="material-icons md-36 configurator-icon check-icon md-36" [ngClass]="{'red-check-icon': configuration.speed > getTopSpeed() || configuration.type ==='Default'}" [matTooltip]="getTopSpeedCheckString()">done</i><br><br>
-          <label class="slider-label">Max torque: </label><br><br> {{getTorque()}} Nm<br><br>
-          <label class="slider-label">RPM: </label><br><br> {{getRPMfromKv()}} <br>
-        </form>
+  </mat-step>
+  <mat-step [completed]="checkBatteryParameters()">
+    <ng-template matStepLabel>Battery</ng-template>
+    <section class="configurator-section">
+      <i class="material-icons md-36 configurator-icon">battery_charging_full</i>
+      <label class="slider-label">Serial cells: </label><br>
+      <mat-slider class="slider" min="0" max="20" step="2" [(ngModel)]="configuration.serial"></mat-slider> {{configuration.serial}}<br><br>
+      <label class="slider-label">Parralel cells: </label><br>
+      <mat-slider class="slider" min="0" max="12" step="1" [(ngModel)]="configuration.parallel"></mat-slider> {{configuration.parallel}}<br><br>
+      <label class="slider-label">Battery weight: </label><br><br> {{batteryWeight()}} Kg<br><br>
+      <label class="slider-label">Volts: </label><br><br> {{configuration.serial*3.6}} V<br><br>
+      <label class="slider-label">Amps: </label><br><br> {{configuration.parallel*10}} A<br>
     </section>
   </mat-step>
-</mat-horizontal-stepper>
-<div class="table-container" *ngIf="configuration.type !== 'Default'" [@panelInOut]>
-  <!-- <label class="table-label">Gearing and torque</label> -->
-  <table mat-table
-        [dataSource]="dataSource" multiTemplateDataRows
-        class="table-body mat-elevation-z8">
-    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
-      <th mat-header-cell *matHeaderCellDef> {{column}} </th>
-      <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
-    </ng-container>
-
-    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-    <ng-container matColumnDef="expandedDetail">
-      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
-        <div class="example-element-detail"
-            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-          <div class="example-element-diagram">
-            <div class="example-element-gear"> {{element.gearRatio}} </div>
-            <div class="example-element-speed"> {{element.speed}} </div>
-            <div class="example-element-torque"> {{element.torque}} </div>
-          </div>
-          <div class="example-element-description">
-            {{element.description}}
-            <span class="example-element-description-attribution"> -- Wikipedia </span>
-          </div>
-        </div>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-    <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
-        class="example-element-row"
-        [class.example-expanded-row]="expandedElement === element"
-        (click)="expandedElement = element">
-    </tr>
+  <mat-step>  
+    <ng-template matStepLabel>Drivetrain</ng-template>
+    <section class="configurator-section">
+      <i class="material-icons md-36 configurator-icon">flash_on</i>
+        <label>Motor type:</label><br><br>
+        <mat-radio-group [(ngModel)]="configuration.type">
+          <mat-radio-button class="type-radio-button" value="Mid">
+            Mid drive
+          </mat-radio-button>
+          <mat-radio-button class="type-radio-button" value="Hub">
+            Hub
+          </mat-radio-button>
+        </mat-radio-group><br><br><br>
+          <form [ngClass]="{'disabled-config-field-background': configuration.type === 'Default'}">
+            <label class="slider-label">Wheel size(inches): </label> <br>
+            <mat-slider [disabled]="configuration.type === 'Default'" name="wheelSizeSlider" class="slider" min="20" max="30" step="1" [(ngModel)]="configuration.wheelSize"></mat-slider> {{configuration.wheelSize}}<br><br>
+            <label class="slider-label">Gearing {{gearingMethod()}}: </label> <br>
+            <mat-slider [disabled]="configuration.type === 'Default'" name="gearingSlider" class="slider" min="3" max="8" step="1" [(ngModel)]="configuration.gearRatio"></mat-slider> {{configuration.gearRatio}}<br><br>
+            <label class="slider-label">Top speed(unloaded): </label><br><br> {{getTopSpeed()}} Kph
+            <i class="material-icons md-36 configurator-icon check-icon md-36" [ngClass]="{'red-check-icon': configuration.speed > getTopSpeed() || configuration.type ==='Default'}" [matTooltip]="getTopSpeedCheckString()">done</i><br><br>
+            <label class="slider-label">Max torque: </label><br><br> {{getTorque()}} Nm<br><br>
+            <label class="slider-label">RPM: </label><br><br> {{getRPMfromKv()}} <br>
+          </form>
+      </section>
+    </mat-step>
+  </mat-horizontal-stepper>
+  <div class="table-container" *ngIf="configuration.type !== 'Default'" [@panelInOut]>
+    <table mat-table 
+          [dataSource]="this.calculateHubGearingTable()" multiTemplateDataRows
+          class="table-body mat-elevation-z8">
+      <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
+        <th mat-header-cell *matHeaderCellDef
+        matTooltip="Shows power required throughout the RPM range, and if the speeds are unattainable with the current system power despite the gearing."> {{column}} </th>
+        <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+      </ng-container>
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+          class="example-element-row">
+      </tr>
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-  </table>
-</div>
+    </table>
+  </div>
 </div>

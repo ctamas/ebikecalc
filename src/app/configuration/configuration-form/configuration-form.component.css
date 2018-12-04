@@ -150,15 +150,14 @@ table {
 
 tr {
     font-size: 16px;
-
 }
+
 tr.example-detail-row {
   height: 0;
 }
 
 .mat-cell {
     font-size: 16px;
-
 }
 
 .mat-header-cell {
