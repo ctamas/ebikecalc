@@ -89,22 +89,6 @@ export class ConfigurationFormComponent implements OnInit {
       return 'Small'
   }
 
-  //  name: string,
-  //  type?: string,
-  //  weight?: number,
-  //  incline?: number,
-  //  wheelSize?: number,
-  //  speed?: number,
-  //  distance?: number,  
-  //  power?: number,
-  //  energy?: number,
-  //  volts?: number,
-  //  amperes?: number,
-  //  serial?: number,
-  //  parallel?: number,
-  //  actualPower?: number,
-  //  actualEnergy?: number,
-
   getRPMfromKv() {
     return Math.floor(this.configuration.serial*3.6*(this.getMotorKv()/this.configuration.gearRatio));
   }
@@ -141,17 +125,13 @@ export class ConfigurationFormComponent implements OnInit {
 
   calculateHubGearingTable() {  
     let result = [];
-    console.log('calculating table');
     if (this.configuration && this.configuration.type !== 'Default') {
-      console.log('table check positive');
-
       for (var i = 0; i < 10; i++) {
         result[i]={
           RPM: (i+1)*10 + '%',
           Speed: Math.floor((this.getTopSpeed()) * ((i+1)/10)),
           Torque: Math.floor((this.getTorque()) * ((10 - (i+1))/10)),
           Wattage: this.checkWattage(this.calculatePower(Math.floor((this.getTopSpeed()) * ((i+1)/10)), 0, this.configuration.weight))
-          
         }
       }
     }
@@ -167,4 +147,3 @@ const hubMotorKv = 35.52;
 const hubMotorKt = 0.268;
 const midMotorKv = 26;
 const midMotorKt = 0.364;
-

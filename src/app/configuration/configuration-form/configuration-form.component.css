@@ -44,6 +44,7 @@
 .fast-animation {
     animation-duration: 0.6s;
 }
+
 .slow-animation {
     animation-duration: 1.6s;
 }
@@ -51,6 +52,7 @@
 .bike-downhill {
     transform: rotate(4deg);
 }
+
 .bike-uphill {
     transform: rotate(-4deg);
 }
@@ -88,9 +90,6 @@ mat-horizontal-stepper {
     float: right;
 }
 
-.environment-configurator-section {
-}
-
 .check-icon {
     color: rgb(0, 219, 0);
     font-size: 2rem;
@@ -99,10 +98,6 @@ mat-horizontal-stepper {
 .red-check-icon {
     color: rgb(255, 0, 0);
     font-size: 2rem;
-}
-.picture-section {
-    /* border-radius: 1.75rem;
-    box-shadow: 0 0 2rem rgba(0, 0, 255, 0.1); */
 }
 
 .section-container {

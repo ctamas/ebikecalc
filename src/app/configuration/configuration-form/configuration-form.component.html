@@ -20,7 +20,7 @@
       <div>Avaliable energy: {{actualEnergy()}} Wh</div>
     </div>
   </section>
-  <mat-horizontal-stepper linear (animationDone)="message=$event">
+  <mat-horizontal-stepper linear>
     <mat-step label="label">
       <section class="configurator-section">
   <label class="slider-label">Speed(kph): </label><i class="material-icons md-36 configurator-icon">landscape</i><br>
@@ -66,7 +66,7 @@
             <mat-slider [disabled]="configuration.type === 'Default'" name="gearingSlider" class="slider" min="3" max="8" step="1" [(ngModel)]="configuration.gearRatio"></mat-slider> {{configuration.gearRatio}}<br><br>
             <label class="slider-label">Top speed(unloaded): </label><br><br> {{getTopSpeed()}} Kph
             <i class="material-icons md-36 configurator-icon check-icon md-36" [ngClass]="{'red-check-icon': configuration.speed > getTopSpeed() || configuration.type ==='Default'}" [matTooltip]="getTopSpeedCheckString()">done</i><br><br>
-            <label class="slider-label">Max torque: </label><br><br> {{getTorque()}} Nm<br><br>
+            <label class="slider-label">Max wheel torque: </label><br><br> {{getTorque()}} Nm<br><br>
             <label class="slider-label">RPM: </label><br><br> {{getRPMfromKv()}} <br>
           </form>
       </section>
