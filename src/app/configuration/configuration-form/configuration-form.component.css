@@ -13,15 +13,6 @@
 }
 
 .bike-animation-container.wind-blow {
-    background:url('/assets/windBlow.gif');
-    height:340px;
-    width:506px;
-    vertical-align: bottom;
-    display: table-cell;
-    box-shadow: 10px 10px 20px 0 white inset, -10px -10px 20px 0 white inset; 
-}
-
-.bike-animation-container.wind-stopped {
     background:url('/assets/windStopped.gif');
     height:340px;
     width:506px;
@@ -78,7 +69,7 @@ mat-slider {
 }
 
 .type-radio-button {
-    margin-right:10px;
+    margin-right:0.5rem;
 }
 
 .configurator-section {
