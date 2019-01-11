@@ -9,7 +9,7 @@
   }
   
   .bike-animation-container.wind-blow {
-      background:url('/ebikecalc/assets/windBlow.gif');
+      background:url('/assets/windBlow.gif');
       height:340px;
     width:506px;
     vertical-align: bottom;
