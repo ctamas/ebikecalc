@@ -1,3 +1,4 @@
+/* Animation and images */
 @keyframes bike-animation {
     0%   {transform: rotate(0deg);}
     20%  {transform: rotate(1deg);}
@@ -6,15 +7,10 @@
     80%  {transform: rotate(-1deg);}
     100% {transform: rotate(0deg);}
   }
-
-.section-container {
-    display: table;
-    margin: 0 auto;
-}
-
-.bike-animation-container.wind-blow {
-    background:url('/ebikecalc/assets/windBlow.gif');
-    height:340px;
+  
+  .bike-animation-container.wind-blow {
+      background:url('/ebikecalc/assets/windBlow.gif');
+      height:340px;
     width:506px;
     vertical-align: bottom;
     display: table-cell;
@@ -51,6 +47,12 @@
 
 .bike-uphill {
     transform: rotate(-4deg);
+}
+
+/* General formatting */
+.section-container {
+    display: table;
+    margin: 0 auto;
 }
 
 .flat {
@@ -108,6 +110,7 @@ mat-slider {
     box-shadow: 0 0 2rem rgba(98, 98, 138, 0.315);
 }
 
+/* Table formatting */
 table {
     padding: 0 1.2rem 0;
     margin: 1.2rem 0.4rem 1.2rem 1.2rem; 
