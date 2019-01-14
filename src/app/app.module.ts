@@ -16,12 +16,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { ConfigurationFormComponent } from './configuration/configuration-form/configuration-form.component';
+import { PerformanceTableComponent } from './configuration/performance-table/performance-table.component';
 import 'hammerjs';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ConfigurationFormComponent
+    ConfigurationFormComponent,
+    PerformanceTableComponent
   ],
   imports: [
     BrowserModule,

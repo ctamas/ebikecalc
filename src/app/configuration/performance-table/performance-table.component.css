@@ -1,0 +1,28 @@
+/* Table formatting */
+table {
+    padding: 0 1.2rem 0;
+    margin: 1.2rem 0.4rem 1.2rem 1.2rem; 
+    box-shadow: 0 0 2rem rgba(0, 0, 255, 0.1);
+}
+
+.mat-table {
+    max-width: 20rem;
+    border-radius: 1.75rem;
+    box-shadow: 0 0 2rem rgba(0, 0, 255, 0.1);
+}
+
+.mat-cell, .mat-header-cell {
+    font-size: 1rem;
+}
+
+tr.table-element-row:hover {
+  background: #f5f5f5;
+}
+
+tr.table-element-row:active {
+  background: #efefef;
+}
+
+td.mat-cell {
+    min-width: 5.8rem;
+}

@@ -6,7 +6,7 @@
           [ngClass]="{'fast-animation': configuration.speed > 50,
         'slow-animation':  configuration.speed <= 50 && configuration.speed > 30,
         'bike-uphill': configuration.incline > 10, 'bike-downhill':  configuration.incline < -10}">
-        <img class="flat" alt="flat" src="assets\flat.png">
+        <img class="flat-grass" alt="flat" src="assets\flat.png">
       </div>
     </div>
     <div class="configurator-section">
@@ -85,15 +85,7 @@
     </mat-step>
   </mat-horizontal-stepper>
   <div class="table-container" *ngIf="configuration.type !== 'Default'" [@panelInOut]>
-    <table mat-table [dataSource]="this.calculateHubGearingTable()" multiTemplateDataRows class="table-body mat-elevation-z8">
-      <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
-        <th matTooltip="Shows power required on flat land throughout the RPM range, and if the speeds are unattainable with the current system power despite the gearing."
-          mat-header-cell *matHeaderCellDef> {{column}} </th>
-        <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-      <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="table-element-row">
-      </tr>
-    </table>
+    <performance-table [tableData]="calculateHubGearingTable()">
+    </performance-table>
   </div>
 </div>

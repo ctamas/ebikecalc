@@ -20,7 +20,6 @@ import { trigger, transition, style, animate } from '@angular/animations';
 
 export class ConfigurationFormComponent implements OnInit {
   configuration: Configuration;
-  columnsToDisplay = ['RPM', 'Speed', 'Torque', 'Wattage'];
 
   ngOnInit() {
     this.newConfiguration();
@@ -129,12 +128,12 @@ export class ConfigurationFormComponent implements OnInit {
   calculateHubGearingTable() {
     let result = [];
     if (this.configuration && this.configuration.type !== 'Default') {
-      for (var i = 0; i < 10; i++) {
+      for (var i = 0; i <= 10; i++) {
         result[i] = {
-          RPM: (i + 1) * 10 + '%',
-          Speed: Math.floor(this.getTopSpeed() * (i + 1) / 10) + ' Kph',
-          Torque: Math.floor(this.getTorque() * (10 - (i + 1)) / 10) + ' Nm',
-          Wattage: this.checkAttainableWattage(this.calculatePower(Math.floor(this.getTopSpeed() * (i + 1) / 10), 0, this.configuration.weight))
+          RPM: i * 10 + '%',
+          Speed: Math.floor(this.getTopSpeed() * i / 10) + ' Kph',
+          Torque: Math.floor(this.getTorque() * (10 - i) / 10) + ' Nm',
+          Wattage: this.checkAttainableWattage(this.calculatePower(Math.floor(this.getTopSpeed() * i / 10), 0, this.configuration.weight))
         }
       }
     }
